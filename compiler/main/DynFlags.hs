@@ -5201,9 +5201,6 @@ makeDynFlagsConsistent dflags
       = let dflags' = dflags { hscTarget = HscLlvm }
             warn = "No native code generator, so using LLVM"
         in loop dflags' warn
- | not (osElfTarget os) && gopt Opt_PIE dflags
-    = loop (gopt_unset dflags Opt_PIE)
-           "Position-independent only supported on ELF platforms"
  | os == OSDarwin &&
    arch == ArchX86_64 &&
    not (gopt Opt_PIC dflags)
