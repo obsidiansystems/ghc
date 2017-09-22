@@ -556,6 +556,13 @@ RanlibCmd="$RANLIB"
 RANLIB="$RanlibCmd"
 AC_SUBST([RanlibCmd])
 
+dnl ** Which strip to use?
+dnl --------------------------------------------------------------
+FP_ARG_WITH_PATH_GNU_PROG([STRIP], [strip], [strip])
+StripCmd="$STRIP"
+STRIP="$StripCmd"
+AC_SUBST([StripCmd])
+
 
 # Note: we may not have objdump on OS X, and we only need it on Windows (for DLL checks)
 case $HostOS_CPP in
