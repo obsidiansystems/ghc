@@ -604,6 +604,7 @@ if test "$RANLIB" = ":"; then
 fi
 RanlibCmd="$RANLIB"
 RANLIB="$RanlibCmd"
+AC_SUBST([RanlibCmd])
 
 dnl ** which strip to use?
 dnl --------------------------------------------------------------
