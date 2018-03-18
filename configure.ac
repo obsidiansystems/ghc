@@ -513,7 +513,8 @@ dnl ** Which nm to use?
 dnl --------------------------------------------------------------
 FP_ARG_WITH_PATH_GNU_PROG([NM], [nm], [nm])
 
-if test "$TargetOS_CPP" = "darwin"
+# Use `HaskellTargetOs` in order to conflate Darwin variants
+if test "$HaskellTargetOs" = "OSDarwin"
 then
     AC_MSG_CHECKING(whether nm program is broken)
     # Some versions of XCode ship a broken version of `nm`. Detect and work
@@ -735,9 +736,15 @@ dnl ** check for dtrace (currently only implemented for Mac OS X)
 HaveDtrace=NO
 AC_PATH_PROG(DtraceCmd,dtrace)
 if test -n "$DtraceCmd"; then
-  if test "x$TargetOS_CPP-$TargetVendor_CPP" = "xdarwin-apple" -o "x$TargetOS_CPP-$TargetVendor_CPP" = "xsolaris2-unknown"; then
-    HaveDtrace=YES
-  fi
+  # Use `HaskellTargetOs` in order to conflate Darwin variants
+  case "$HaskellTargetOs-$TargetVendor_CPP" in
+    OSDarwin-apple|OSSolaris2-unknown)
+      HaveDtrace=YES
+      ;;
+    *)
+      HaveDtrace=NO
+      ;;
+  esac
 fi
 AC_SUBST(HaveDtrace)
 
