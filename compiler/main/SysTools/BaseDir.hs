@@ -23,7 +23,7 @@ import System.FilePath
 import Data.List
 
 -- POSIX
-#if defined(darwin_HOST_OS) || defined(linux_HOST_OS)
+#if defined(macos_HOST_OS) || defined(linux_HOST_OS)
 import System.Environment (getExecutablePath)
 #endif
 
@@ -170,7 +170,7 @@ type GetFinalPath = HANDLE -> LPTSTR -> DWORD -> DWORD -> IO DWORD
 
 foreign import WINDOWS_CCONV unsafe "dynamic"
   makeGetFinalPathNameByHandle :: FunPtr GetFinalPath -> GetFinalPath
-#elif defined(darwin_HOST_OS) || defined(linux_HOST_OS)
+#elif defined(macos_HOST_OS) || defined(linux_HOST_OS)
 -- on unix, this is a bit more confusing.
 -- The layout right now is somehting like
 --

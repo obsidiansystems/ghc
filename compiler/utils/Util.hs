@@ -223,7 +223,7 @@ isWindowsHost = False
 #endif
 
 isDarwinHost :: Bool
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 isDarwinHost = True
 #else
 isDarwinHost = False

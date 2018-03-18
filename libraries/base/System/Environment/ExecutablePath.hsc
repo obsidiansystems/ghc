@@ -21,7 +21,7 @@ module System.Environment.ExecutablePath ( getExecutablePath ) where
 -- The imports are purposely kept completely disjoint to prevent edits
 -- to one OS implementation from breaking another.
 
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 import Data.Word
 import Foreign.C
 import Foreign.Marshal.Alloc
@@ -66,7 +66,7 @@ getExecutablePath :: IO FilePath
 --------------------------------------------------------------------------------
 -- Mac OS X
 
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 
 type UInt32 = Word32
 

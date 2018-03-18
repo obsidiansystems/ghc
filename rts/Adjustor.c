@@ -287,14 +287,14 @@ extern void obscure_ccall_ret_code(void);
  */
 
 typedef struct AdjustorStub {
-#if defined(powerpc_HOST_ARCH) && defined(darwin_HOST_OS)
+#if defined(powerpc_HOST_ARCH) && defined(macos_HOST_OS)
     unsigned        lis;
     unsigned        ori;
     unsigned        lwz;
     unsigned        mtctr;
     unsigned        bctr;
     StgFunPtr       code;
-#elif defined(powerpc64_HOST_ARCH) && defined(darwin_HOST_OS)
+#elif defined(powerpc64_HOST_ARCH) && defined(macos_HOST_OS)
         /* powerpc64-darwin: just guessing that it won't use fundescs. */
     unsigned        lis;
     unsigned        ori;
@@ -381,7 +381,7 @@ createAdjustor(int cconv, StgStablePtr hptr,
   switch (cconv)
   {
   case 0: /* _stdcall */
-#if defined(i386_HOST_ARCH) && !defined(darwin_HOST_OS)
+#if defined(i386_HOST_ARCH) && !defined(macos_HOST_OS)
     /* Magic constant computed by inspecting the code length of
        the following assembly language snippet
        (offset and machine code prefixed):

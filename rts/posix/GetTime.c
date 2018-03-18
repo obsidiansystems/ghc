@@ -29,14 +29,14 @@
 // we'll implement getProcessCPUTime() and getProcessElapsedTime()
 // separately, using getrusage() and gettimeofday() respectively
 
-#if !defined(HAVE_CLOCK_GETTIME) && defined(darwin_HOST_OS)
+#if !defined(HAVE_CLOCK_GETTIME) && defined(macos_HOST_OS)
 static uint64_t timer_scaling_factor_numer = 0;
 static uint64_t timer_scaling_factor_denom = 0;
 #endif
 
 void initializeTimer()
 {
-#if !defined(HAVE_CLOCK_GETTIME) && defined(darwin_HOST_OS)
+#if !defined(HAVE_CLOCK_GETTIME) && defined(macos_HOST_OS)
     mach_timebase_info_data_t info;
     (void) mach_timebase_info(&info);
     timer_scaling_factor_numer = (uint64_t)info.numer;
@@ -93,7 +93,7 @@ StgWord64 getMonotonicNSec(void)
     return (StgWord64)ts.tv_sec * 1000000000 +
            (StgWord64)ts.tv_nsec;
 
-#elif defined(darwin_HOST_OS)
+#elif defined(macos_HOST_OS)
 
     uint64_t time = mach_absolute_time();
     return (time * timer_scaling_factor_numer) / timer_scaling_factor_denom;

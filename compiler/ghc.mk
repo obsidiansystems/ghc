@@ -162,6 +162,8 @@ compiler/stage1/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define HostPlatform_NAME   \"$(HOSTPLATFORM)\""   >> $@
 	@echo "#define TargetPlatform_NAME \"$(TARGETPLATFORM)\"" >> $@
 	@echo                                                     >> $@
+	@echo "#define LLVM_TARGET \"$(LLVMTarget_CPP)\""         >> $@
+	@echo                                                     >> $@
 	@echo "#define $(BuildPlatform_CPP)_BUILD 1"              >> $@
 	@echo "#define $(HostPlatform_CPP)_HOST 1"                >> $@
 	@echo "#define $(TargetPlatform_CPP)_TARGET 1"            >> $@
@@ -172,7 +174,6 @@ compiler/stage1/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define BUILD_ARCH \"$(BuildArch_CPP)\""           >> $@
 	@echo "#define HOST_ARCH \"$(HostArch_CPP)\""             >> $@
 	@echo "#define TARGET_ARCH \"$(TargetArch_CPP)\""         >> $@
-	@echo "#define LLVM_TARGET \"$(LLVMTarget_CPP)\""         >> $@
 	@echo                                                     >> $@
 	@echo "#define $(BuildOS_CPP)_BUILD_OS 1"                 >> $@
 	@echo "#define $(HostOS_CPP)_HOST_OS 1"                   >> $@
@@ -180,6 +181,16 @@ compiler/stage1/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define BUILD_OS \"$(BuildOS_CPP)\""               >> $@
 	@echo "#define HOST_OS \"$(HostOS_CPP)\""                 >> $@
 	@echo "#define TARGET_OS \"$(TargetOS_CPP)\""             >> $@
+	@echo                                                     >> $@
+	@echo "#if defined(macos_BUILD_OS) || defined(ios_BUILD_OS)"   >> $@
+	@echo "#  define darwin_BUILD_OS"                              >> $@
+	@echo "#endif"                                                 >> $@
+	@echo "#if defined(macos_HOST_OS) || defined(ios_HOST_OS)"     >> $@
+	@echo "#  define darwin_HOST_OS"                               >> $@
+	@echo "#endif"                                                 >> $@
+	@echo "#if defined(macos_TARGET_OS) || defined(ios_TARGET_OS)" >> $@
+	@echo "#  define darwin_TARGET_OS"                             >> $@
+	@echo "#endif"                                                 >> $@
 	@echo                                                     >> $@
 	@echo "#define $(BuildVendor_CPP)_BUILD_VENDOR 1"         >> $@
 	@echo "#define $(HostVendor_CPP)_HOST_VENDOR 1"           >> $@
@@ -204,6 +215,8 @@ compiler/stage2/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define HostPlatform_NAME   \"$(TARGETPLATFORM)\"" >> $@
 	@echo "#define TargetPlatform_NAME \"$(TARGETPLATFORM)\"" >> $@
 	@echo                                                     >> $@
+	@echo "#define LLVM_TARGET \"$(LLVMTarget_CPP)\""         >> $@
+	@echo                                                     >> $@
 	@echo "#define $(HostPlatform_CPP)_BUILD 1"               >> $@
 	@echo "#define $(TargetPlatform_CPP)_HOST 1"              >> $@
 	@echo "#define $(TargetPlatform_CPP)_TARGET 1"            >> $@
@@ -214,7 +227,6 @@ compiler/stage2/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define BUILD_ARCH \"$(HostArch_CPP)\""            >> $@
 	@echo "#define HOST_ARCH \"$(TargetArch_CPP)\""           >> $@
 	@echo "#define TARGET_ARCH \"$(TargetArch_CPP)\""         >> $@
-	@echo "#define LLVM_TARGET \"$(LLVMTarget_CPP)\""         >> $@
 	@echo                                                     >> $@
 	@echo "#define $(HostOS_CPP)_BUILD_OS 1"                  >> $@
 	@echo "#define $(TargetOS_CPP)_HOST_OS 1"                 >> $@
@@ -222,6 +234,16 @@ compiler/stage2/$(PLATFORM_H) : mk/config.mk mk/project.mk | $$(dir $$@)/.
 	@echo "#define BUILD_OS \"$(HostOS_CPP)\""                >> $@
 	@echo "#define HOST_OS \"$(TargetOS_CPP)\""               >> $@
 	@echo "#define TARGET_OS \"$(TargetOS_CPP)\""             >> $@
+	@echo                                                     >> $@
+	@echo "#if defined(macos_BUILD_OS) || defined(ios_BUILD_OS)"   >> $@
+	@echo "#  define darwin_BUILD_OS"                              >> $@
+	@echo "#endif"                                                 >> $@
+	@echo "#if defined(macos_HOST_OS) || defined(ios_HOST_OS)"     >> $@
+	@echo "#  define darwin_HOST_OS"                               >> $@
+	@echo "#endif"                                                 >> $@
+	@echo "#if defined(macos_TARGET_OS) || defined(ios_TARGET_OS)" >> $@
+	@echo "#  define darwin_TARGET_OS"                             >> $@
+	@echo "#endif"                                                 >> $@
 	@echo                                                     >> $@
 	@echo "#define $(HostVendor_CPP)_BUILD_VENDOR 1"          >> $@
 	@echo "#define $(TargetVendor_CPP)_HOST_VENDOR 1"         >> $@

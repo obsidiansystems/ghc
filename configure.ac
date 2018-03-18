@@ -1161,8 +1161,12 @@ AC_ARG_ENABLE(large-address-space,
 use_large_address_space=no
 if test "$ac_cv_sizeof_void_p" -eq 8 ; then
     if test "x$EnableLargeAddressSpace" = "xyes" ; then
-        if test "$ghc_host_os" = "darwin" ; then
-            use_large_address_space=yes
+        case "$ghc_host_os" in
+            # Darwin for back-compat
+            darwin|macos|ios|watchos|tvos)
+                use_large_address_space=yes
+                ;;
+        esac
 	elif test "$ghc_host_os" = "openbsd" ; then
 	    # as of OpenBSD 5.8 (2015), OpenBSD does not support mmap with MAP_NORESERVE.
 	    # The flag MAP_NORESERVE is supported for source compatibility reasons,
@@ -1195,8 +1199,8 @@ case ${TargetOS} in
     linux|linux-android|freebsd|dragonfly|netbsd|openbsd|kfreebsdgnu|gnu|solaris2)
         RtsLinkerUseMmap=1
         ;;
-    darwin|ios|watchos|tvos)
-        # Don't use mmap on powerpc/darwin as the mmap there doesn't support
+    macos|ios|watchos|tvos)
+        # Don't use mmap on PowerPC/Darwin as the mmap there doesn't support
         # reallocating. Reallocating is needed to allocate jump islands just
         # after each object image. Jumps to these jump islands use relative
         # branches which are limited to offsets that can be represented in

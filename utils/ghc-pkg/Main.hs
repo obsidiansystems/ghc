@@ -65,7 +65,7 @@ import System.Directory ( doesDirectoryExist, getDirectoryContents,
                           getCurrentDirectory )
 import System.Exit ( exitWith, ExitCode(..) )
 import System.Environment ( getArgs, getProgName, getEnv )
-#if defined(darwin_HOST_OS) || defined(linux_HOST_OS)
+#if defined(macos_HOST_OS) || defined(linux_HOST_OS)
 import System.Environment ( getExecutablePath )
 #endif
 import System.IO
@@ -2119,7 +2119,7 @@ getExecPath = try_size 2048 -- plenty, PATH_MAX is 512 under Win32.
 
 foreign import WINDOWS_CCONV unsafe "windows.h GetModuleFileNameW"
   c_GetModuleFileName :: Ptr () -> CWString -> Word32 -> IO Word32
-#elif defined(darwin_HOST_OS) || defined(linux_HOST_OS)
+#elif defined(macos_HOST_OS) || defined(linux_HOST_OS)
 -- TODO: a) this is copy-pasta from SysTools.hs / getBaseDir. Why can't we reuse
 --          this here? and parameterise getBaseDir over the executable (for
 --          windows)?
