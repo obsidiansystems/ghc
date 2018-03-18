@@ -106,7 +106,7 @@
 # else
 #  define CLOCK_ID CLOCK_REALTIME
 # endif
-#elif defined(darwin_HOST_OS)
+#elif defined(macos_HOST_OS)
 # include <mach/mach.h>
 # include <mach/mach_time.h>
 #endif
@@ -546,7 +546,7 @@ INLINE int __hscore_open(char *file, int how, mode_t mode) {
 }
 #endif
 
-#if darwin_HOST_OS
+#if macos_HOST_OS
 // You should not access _environ directly on Darwin in a bundle/shared library.
 // See #2458 and http://developer.apple.com/library/mac/#documentation/Darwin/Reference/ManPages/man7/environ.7.html
 #include <crt_externs.h>

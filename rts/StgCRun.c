@@ -114,7 +114,7 @@ STG_NO_OPTIMIZE StgWord8 *win32AllocStack(void)
 
 #if defined(i386_HOST_ARCH)
 
-#if defined(darwin_HOST_OS) || defined(ios_HOST_OS)
+#if defined(darwin_HOST_OS)
 #define STG_GLOBAL ".globl "
 #define STG_HIDDEN ".private_extern "
 #else
@@ -243,7 +243,7 @@ StgRunIsImplementedInAssembler(void)
 
 #define STG_GLOBAL ".globl "
 
-#if defined(darwin_HOST_OS) || defined(ios_HOST_OS)
+#if defined(darwin_HOST_OS)
 #define STG_HIDDEN ".private_extern "
 #else
 #define STG_HIDDEN ".hidden "
@@ -622,7 +622,7 @@ StgRun(StgFunPtr f, StgRegTable *basereg) {
 
 #define STG_GLOBAL ".globl "
 
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 #define STG_HIDDEN ".private_extern "
 #else
 #define STG_HIDDEN ".hidden "
@@ -632,7 +632,7 @@ StgRun(StgFunPtr f, StgRegTable *basereg) {
 
 // implementation is in StgCRunAsm.S
 
-#elif defined(darwin_HOST_OS)
+#elif defined(macos_HOST_OS)
 void StgRunIsImplementedInAssembler(void)
 {
 #if HAVE_SUBSECTIONS_VIA_SYMBOLS

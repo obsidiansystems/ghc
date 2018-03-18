@@ -84,7 +84,7 @@ import System.Directory ( doesDirectoryExist, getDirectoryContents,
                           getCurrentDirectory )
 import System.Exit ( exitWith, ExitCode(..) )
 import System.Environment ( getArgs, getProgName, getEnv )
-#if defined(darwin_HOST_OS) || defined(linux_HOST_OS) || SIMPLE_WIN_GETLIBDIR
+#if defined(macos_HOST_OS) || defined(linux_HOST_OS) || SIMPLE_WIN_GETLIBDIR
 import System.Environment ( getExecutablePath )
 #endif
 import System.IO
@@ -2254,7 +2254,7 @@ getExecPath = try_size 2048 -- plenty, PATH_MAX is 512 under Win32.
 
 foreign import WINDOWS_CCONV unsafe "windows.h GetModuleFileNameW"
   c_GetModuleFileName :: Ptr () -> CWString -> Word32 -> IO Word32
-#elif SIMPLE_WIN_GETLIBDIR || defined(darwin_HOST_OS) || defined(linux_HOST_OS)
+#elif SIMPLE_WIN_GETLIBDIR || defined(macos_HOST_OS) || defined(linux_HOST_OS)
 getLibDir = Just . (\p -> p </> "lib") . takeDirectory . takeDirectory <$> getExecutablePath
 #else
 getLibDir = return Nothing

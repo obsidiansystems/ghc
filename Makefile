@@ -177,7 +177,7 @@ bootstrapping-files show echo:
 show!:
 	$(MAKE) --no-print-directory -f ghc.mk show NO_INCLUDE_PKGDATA=YES
 
-ifeq "$(darwin_TARGET_OS)" "1"
+ifeq "$(macos_TARGET_OS)" "1"
 .PHONY: framework-pkg
 framework-pkg:
 	$(MAKE) -C distrib/MacOS $@

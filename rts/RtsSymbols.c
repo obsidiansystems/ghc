@@ -227,7 +227,7 @@
 #endif
 
 
-#if defined(darwin_HOST_OS) && HAVE_PRINTF_LDBLSTUB
+#if defined(macos_HOST_OS) && HAVE_PRINTF_LDBLSTUB
 #define RTS_DARWIN_ONLY_SYMBOLS                             \
      SymI_NeedsProto(asprintf$LDBLStub)                     \
      SymI_NeedsProto(err$LDBLStub)                          \
@@ -957,7 +957,7 @@
 #define RTS_LIBGCC_SYMBOLS
 #endif
 
-#if defined(darwin_HOST_OS) && defined(powerpc_HOST_ARCH)
+#if defined(macos_HOST_OS) && defined(powerpc_HOST_ARCH)
       // Symbols that don't have a leading underscore
       // on Mac OS X. They have to receive special treatment,
       // see machoInitSymbolsWithoutUnderscore()
@@ -1044,7 +1044,7 @@ RtsSymbolVal rtsSyms[] = {
       RTS_OPENBSD_ONLY_SYMBOLS
       RTS_LIBGCC_SYMBOLS
       RTS_LIBFFI_SYMBOLS
-#if defined(darwin_HOST_OS) && defined(i386_HOST_ARCH)
+#if defined(macos_HOST_OS) && defined(i386_HOST_ARCH)
       // dyld stub code contains references to this,
       // but it should never be called because we treat
       // lazy pointers as nonlazy.

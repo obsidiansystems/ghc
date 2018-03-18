@@ -19,7 +19,7 @@ static void (*ctors[2])(void) __attribute__((
             aligned(sizeof(void*))))
     = {ctors2, ctors1}; // ctors run in reverse
 
-#elif defined(darwin_HOST_OS)
+#elif defined(macos_HOST_OS)
 
 static void (*mod_init_func[2])(void) __attribute__((
             // Mac OS X sections are in two parts: the segment name and

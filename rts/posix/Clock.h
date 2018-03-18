@@ -26,7 +26,7 @@
 # else
 #  define CLOCK_ID CLOCK_REALTIME
 # endif
-#elif defined(darwin_HOST_OS)
+#elif defined(macos_HOST_OS)
 # include <mach/mach.h>
 # include <mach/mach_time.h>
 #endif

@@ -1,6 +1,6 @@
 #include "Rts.h"
 
-#if defined(darwin_HOST_OS) || defined(ios_HOST_OS)
+#if defined(darwin_HOST_OS)
 
 #if defined(ios_HOST_OS)
 #if !RTS_LINKER_USE_MMAP
@@ -1944,4 +1944,4 @@ machoGetMisalignment( FILE * f )
     return misalignment ? (16 - misalignment) : 0;
 }
 
-#endif /* darwin_HOST_OS, ios_HOST_OS */
+#endif /* darwin_HOST_OS */

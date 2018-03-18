@@ -63,7 +63,7 @@
 #define MACHREGS_aarch64  1
 #endif
 
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 #define MACHREGS_darwin   1
 #endif
 

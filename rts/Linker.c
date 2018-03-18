@@ -72,7 +72,7 @@
 #  include <mach-o/fat.h>
 #endif
 
-#if defined(x86_64_HOST_ARCH) && defined(darwin_HOST_OS)
+#if defined(x86_64_HOST_ARCH) && defined(macos_HOST_OS)
 #define ALWAYS_PIC
 #endif
 
@@ -1386,7 +1386,7 @@ preloadObjectFile (pathchar *path)
        return NULL;
    }
 
-#  if defined(darwin_HOST_OS)
+#  if defined(macos_HOST_OS)
 
     // In a Mach-O .o file, all sections can and will be misaligned
     // if the total size of the headers is not a multiple of the
