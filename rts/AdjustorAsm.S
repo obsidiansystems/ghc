@@ -30,9 +30,9 @@
     /* The following defines mirror struct AdjustorStub
        from Adjustor.c. Make sure to keep these in sync.
     */
-#if defined(powerpc_HOST_ARCH) && defined(darwin_HOST_OS)
+#if defined(powerpc_HOST_ARCH) && defined(macos_HOST_OS)
 #define HEADER_WORDS   6
-#elif defined(powerpc64_HOST_ARCH) && defined(darwin_HOST_OS)
+#elif defined(powerpc64_HOST_ARCH) && defined(macos_HOST_OS)
 #else
 #define HEADER_WORDS   3
 #endif
@@ -44,7 +44,7 @@
 
     /* Darwin insists on register names, everyone else prefers
        to use numbers. */
-#if !defined(darwin_HOST_OS)
+#if !defined(macos_HOST_OS)
 #define r0 0
 #define r1 1
 #define r2 2
@@ -131,7 +131,7 @@ L2:
     LOAD    r3, HPTR_OFF(r2)
 
     LOAD    r12, WPTR_OFF(r2)
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
     mtctr   r12
 #else
     LOAD    r0, 0(r12)

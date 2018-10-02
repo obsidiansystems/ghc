@@ -9,7 +9,7 @@
 #include "Rts.h"
 #include "GetEnv.h"
 
-#if defined(darwin_HOST_OS)
+#if defined(macos_HOST_OS)
 
 /* While the "extern char** environ" var does exist on OSX, it is not
  * available to shared libs. See ghc ticket #2458 and

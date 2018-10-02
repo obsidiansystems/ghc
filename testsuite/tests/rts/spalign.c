@@ -1,6 +1,6 @@
 #include "Rts.h"
 
-#ifdef darwin_HOST_OS
+#ifdef macos_HOST_OS
 #define STG_GLOBAL ".globl "
 #else
 #define STG_GLOBAL ".global "

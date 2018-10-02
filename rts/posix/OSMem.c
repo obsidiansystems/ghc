@@ -39,7 +39,7 @@
 
 #include <errno.h>
 
-#ifdef darwin_HOST_OS
+#if darwin_HOST_OS
 #include <mach/mach.h>
 #include <mach/vm_map.h>
 #include <sys/sysctl.h>
@@ -368,7 +368,7 @@ StgWord64 getPhysicalMemorySize (void)
 {
     static StgWord64 physMemSize = 0;
     if (!physMemSize) {
-#ifdef darwin_HOST_OS
+#if defined(darwin_HOST_OS)
         /* So, darwin doesn't support _SC_PHYS_PAGES, but it does
            support getting the raw memory size in bytes through
            sysctlbyname(hw.memsize); */
@@ -394,7 +394,7 @@ StgWord64 getPhysicalMemorySize (void)
             return 0;
         }
         physMemSize = ret * pageSize;
-#endif /* darwin_HOST_OS */
+#endif /* macos_HOST_OS */
     }
     return physMemSize;
 }
