@@ -1,6 +1,6 @@
 #include "Rts.h"
 
-#if defined(darwin_HOST_OS) || defined(ios_HOST_OS)
+#ifdef darwin_HOST_OS
 #include "RtsUtils.h"
 #include "GetEnv.h"
 #include "LinkerInternals.h"
@@ -15,9 +15,9 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 #include <mach-o/reloc.h>
-#endif /* darwin_HOST_OS, ios_HOST_OS */
+#endif /* darwin_HOST_OS */
 
-#ifdef darwin_HOST_OS
+#ifdef macos_HOST_OS
 
 #if defined(HAVE_SYS_MMAN_H)
 #  include <sys/mman.h>
@@ -1207,9 +1207,9 @@ machoInitSymbolsWithoutUnderscore(void)
 }
 #endif
 
-#endif /* darwin_HOST_OS */
+#endif /* macos_HOST_OS */
 
-#if defined(darwin_HOST_OS) || defined(ios_HOST_OS)
+#ifdef darwin_HOST_OS
 /*
  * Figure out by how much to shift the entire Mach-O file in memory
  * when loading so that its single segment ends up 16-byte-aligned
@@ -1245,4 +1245,4 @@ machoGetMisalignment( FILE * f )
 
     return misalignment ? (16 - misalignment) : 0;
 }
-#endif /* darwin_HOST_OS, ios_HOST_OS */
+#endif /* darwin_HOST_O */
