@@ -201,7 +201,8 @@ dnl we ask the bootstrapping compiler what platform it is for
 if test "${WithGhc}" != ""
 then
         bootstrap_host=`"${WithGhc}" +RTS --info | grep '^ ,("Host platform"' | sed -e 's/.*, "//' -e 's/")//' | tr -d '\r'`
-        bootstrap_target=`"${WithGhc}" +RTS --info | grep '^ ,("Target platform"' | sed -e 's/.*, "//' -e 's/")//' | tr -d '\r'`
+        # Turn darwin -> macos to deal with the changing default
+        bootstrap_target=`"${WithGhc}" +RTS --info | grep '^ ,("Target platform"' | sed -e 's/.*, "//' -e 's/")//' | tr -d '\r' | sed s/darwin/macos/`
         if test "$bootstrap_host" != "$bootstrap_target"
         then
                 echo "Bootstrapping GHC is a cross compiler. This probably isn't going to work"
@@ -513,7 +514,8 @@ dnl ** Which nm to use?
 dnl --------------------------------------------------------------
 FP_ARG_WITH_PATH_GNU_PROG([NM], [nm], [nm])
 
-if test "$TargetOS_CPP" = "darwin"
+# Use `HaskellTargetOs` in order to conflate Darwin variants
+if test "$HaskellTargetOs" = "OSDarwin"
 then
     AC_MSG_CHECKING(whether nm program is broken)
     # Some versions of XCode ship a broken version of `nm`. Detect and work
@@ -586,6 +588,12 @@ LlvmVersion=3.9
 AC_SUBST([LlvmVersion])
 sUPPORTED_LLVM_VERSION=$(echo \($LlvmVersion\) | sed 's/\./,/')
 AC_DEFINE_UNQUOTED([sUPPORTED_LLVM_VERSION], ${sUPPORTED_LLVM_VERSION}, [The supported LLVM version number])
+
+dnl ** Which LLVM clang to use?
+dnl --------------------------------------------------------------
+AC_CHECK_TARGET_TOOL([CLANG], [clang])
+ClangCmd="$CLANG"
+AC_SUBST([ClangCmd])
 
 dnl ** Which LLVM llc to use?
 dnl --------------------------------------------------------------
@@ -729,9 +737,15 @@ dnl ** check for dtrace (currently only implemented for Mac OS X)
 HaveDtrace=NO
 AC_PATH_PROG(DtraceCmd,dtrace)
 if test -n "$DtraceCmd"; then
-  if test "x$TargetOS_CPP-$TargetVendor_CPP" = "xdarwin-apple" -o "x$TargetOS_CPP-$TargetVendor_CPP" = "xsolaris2-unknown"; then
-    HaveDtrace=YES
-  fi
+  # Use `HaskellTargetOs` in order to conflate Darwin variants
+  case "$HaskellTargetOs-$TargetVendor_CPP" in
+    OSDarwin-apple|OSSolaris2-unknown)
+      HaveDtrace=YES
+      ;;
+    *)
+      HaveDtrace=NO
+      ;;
+  esac
 fi
 AC_SUBST(HaveDtrace)
 
@@ -1065,14 +1079,18 @@ AC_ARG_ENABLE(large-address-space,
 use_large_address_space=no
 if test "$ac_cv_sizeof_void_p" -eq 8 ; then
     if test "x$EnableLargeAddressSpace" = "xyes" ; then
-        if test "$ghc_host_os" = "darwin" ; then
+        case "$ghc_host_os" in
+          # Darwin for back-compat
+          darwin|macos|ios|watchos|tvos)
             use_large_address_space=yes
-	elif test "$ghc_host_os" = "openbsd" ; then
-	    # as of OpenBSD 5.8 (2015), OpenBSD does not support mmap with MAP_NORESERVE.
-	    # The flag MAP_NORESERVE is supported for source compatibility reasons,
-	    # but is completely ignored by OS mmap
+            ;;
+          openbsd)
+            # as of OpenBSD 5.8 (2015), OpenBSD does not support mmap with MAP_NORESERVE.
+            # The flag MAP_NORESERVE is supported for source compatibility reasons,
+            # but is completely ignored by OS mmap
             use_large_address_space=no
-        else
+            ;;
+          *)
             AC_CHECK_DECLS([MAP_NORESERVE, MADV_FREE, MADV_DONTNEED],[],[],
                 [
                 #include <unistd.h>
@@ -1085,7 +1103,8 @@ if test "$ac_cv_sizeof_void_p" -eq 8 ; then
                 test "$ac_cv_have_decl_MADV_DONTNEED" = "yes" ; then
                     use_large_address_space=yes
             fi
-        fi
+            ;;
+        esac
     fi
 fi
 if test "$use_large_address_space" = "yes" ; then
@@ -1099,8 +1118,8 @@ case ${TargetOS} in
     linux|linux-android|freebsd|dragonfly|netbsd|openbsd|kfreebsdgnu|gnu|solaris2)
         RtsLinkerUseMmap=1
         ;;
-    darwin)
-        # Don't use mmap on powerpc/darwin as the mmap there doesn't support
+    macos|ios|watchos|tvos)
+        # Don't use mmap on PowerPC/Darwin as the mmap there doesn't support
         # reallocating. Reallocating is needed to allocate jump islands just
         # after each object image. Jumps to these jump islands use relative
         # branches which are limited to offsets that can be represented in
@@ -1263,6 +1282,7 @@ echo "\
    xelatex      : $XELATEX
 
    Using LLVM tools
+      clang : $ClangCmd
       llc   : $LlcCmd
       opt   : $OptCmd"
 
