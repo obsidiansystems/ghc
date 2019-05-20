@@ -718,6 +718,7 @@ type instance XApp           (GhcPass _) = NoExt
 type instance XAppTypeE      GhcPs = LHsWcType GhcPs
 type instance XAppTypeE      GhcRn = LHsWcType GhcRn
 type instance XAppTypeE      GhcTc = LHsWcType GhcRn
+type instance XAppTypeE      GhcSe = LHsWcType GhcSe
 
 type instance XOpApp         GhcPs = NoExt
 type instance XOpApp         GhcRn = Fixity
@@ -768,6 +769,7 @@ type instance XRecordUpd     GhcSe = NoExt
 type instance XExprWithTySig GhcPs = (LHsSigWcType GhcPs)
 type instance XExprWithTySig GhcRn = (LHsSigWcType GhcRn)
 type instance XExprWithTySig GhcTc = (LHsSigWcType GhcRn)
+type instance XExprWithTySig GhcSe = (LHsSigWcType GhcSe)
 
 type instance XArithSeq      GhcPs = NoExt
 type instance XArithSeq      GhcRn = NoExt

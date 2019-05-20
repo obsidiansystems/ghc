@@ -60,8 +60,8 @@ instance Binary (HsExpr GhcSe) where
       putByte bh 8 >> put_ bh a >> put_ bh b
     HsApp a b c ->
       putByte bh 9 >> put_ bh a >> put_ bh b >> put_ bh c
-    HsAppType a b c ->
-      putByte bh 10 >> put_ bh a >> put_ bh b >> put_ bh c
+    HsAppType a b ->
+      putByte bh 10 >> put_ bh a >> put_ bh b
     OpApp a b c d ->
       putByte bh 11 >> put_ bh a >> put_ bh b >> put_ bh c
                     >> put_ bh d
@@ -95,8 +95,8 @@ instance Binary (HsExpr GhcSe) where
       putByte bh 24 >> put_ bh a >> put_ bh b >> put_ bh c
     RecordUpd a b c ->
       putByte bh 25 >> put_ bh a >> put_ bh b >> put_ bh c
-    ExprWithTySig a b c ->
-      putByte bh 26 >> put_ bh a >> put_ bh b >> put_ bh c
+    ExprWithTySig a b ->
+      putByte bh 26 >> put_ bh a >> put_ bh b
     ArithSeq a b c ->
       putByte bh 27 >> put_ bh a >> put_ bh b >> put_ bh c
     EWildPat a ->
@@ -149,7 +149,7 @@ instance Binary (HsExpr GhcSe) where
       7  -> HsLam <$> get bh <*> get bh
       8  -> HsLamCase <$> get bh <*> get bh
       9  -> HsApp <$> get bh <*> get bh <*> get bh
-      10 -> HsAppType <$> get bh <*> get bh <*> get bh
+      10 -> HsAppType <$> get bh <*> get bh
       11 -> OpApp <$> get bh <*> get bh <*> get bh <*> get bh
       12 -> NegApp <$> get bh <*> get bh <*> get bh
       13 -> HsPar <$> get bh <*> get bh
@@ -165,7 +165,7 @@ instance Binary (HsExpr GhcSe) where
       23 -> ExplicitList <$> get bh <*> get bh <*> get bh
       24 -> RecordCon <$> get bh <*> get bh <*> get bh
       25 -> RecordUpd <$> get bh <*> get bh <*> get bh
-      26 -> ExprWithTySig <$> get bh <*> get bh <*> get bh
+      26 -> ExprWithTySig <$> get bh <*> get bh
       27 -> ArithSeq <$> get bh <*> get bh <*> get bh
       28 -> EWildPat <$> get bh
       29 -> EAsPat <$> get bh <*> get bh <*> get bh
@@ -600,7 +600,7 @@ instance Binary (Pat GhcSe) where
     NPlusKPat a b c d e f ->
       putByte bh 13 >> put_ bh a >> put_ bh b >> put_ bh c >> put_ bh d
                     >> put_ bh e >> put_ bh f
-    SigPat _ a b ->
+    SigPat a b ->
       putByte bh 14 >> put_ bh a >> put_ bh b
     SplicePat a b ->
       putByte bh 15 >> put_ bh a >> put_ bh b
@@ -626,24 +626,10 @@ instance Binary (Pat GhcSe) where
       12 -> NPat <$> get bh <*> get bh <*> get bh <*> get bh
       13 -> NPlusKPat <$> get bh <*> get bh <*> get bh <*> get bh
                       <*> get bh <*> get bh
-      14 -> SigPat <$> get bh <*> get bh <*> get bh
+      14 -> SigPat <$> get bh <*> get bh
       15 -> SplicePat <$> get bh <*> get bh
       16 -> XPat <$> get bh
       _ -> getPanic "HsPat"
-
-instance (Binary a, Binary b) => Binary (HsArg a b) where
-  put_ bh arg = case arg of
-    HsValArg a -> putByte bh 0 >> put_ bh a
-    HsTypeArg a -> putByte bh 1 >> put_ bh a
-    HsArgPar a -> putByte bh 2 >> put_ bh a
-
-  get bh = do
-    tag <- getByte bh
-    case tag of
-      0 -> HsValArg <$> get bh
-      1 -> HsTypeArg <$> get bh
-      2 -> HsArgPar <$> get bh
-      _ -> getPanic "HsArg"
 
 instance Binary NoExt where
   put_ _ NoExt = return ()
@@ -1194,9 +1180,9 @@ instance Binary (RuleDecls GhcSe) where
 
 instance Binary (RuleDecl GhcSe) where
   put_ bh decl = case decl of
-    HsRule a b c d e f g ->
+    HsRule a b c d e f ->
       putByte bh 0 >> put_ bh a >> put_ bh b >> put_ bh c >> put_ bh d
-                   >> put_ bh e >> put_ bh f >> put_ bh g
+                   >> put_ bh e >> put_ bh f
     XRuleDecl a ->
       putByte bh 1 >> put_ bh a
 
@@ -1204,7 +1190,7 @@ instance Binary (RuleDecl GhcSe) where
     tag <- getByte bh
     case tag of
       0 -> HsRule <$> get bh <*> get bh <*> get bh <*> get bh
-                  <*> get bh <*> get bh <*> get bh
+                  <*> get bh <*> get bh
       1 -> XRuleDecl <$> get bh
       _ -> getPanic "RuleDecl"
 
@@ -1355,9 +1341,9 @@ instance Binary (RuleBndr GhcSe) where
 
 instance (Binary a, Binary b) => Binary (FamEqn GhcSe a b) where
   put_ bh e = case e of
-    FamEqn a b c d e f ->
+    FamEqn a b c d e ->
       putByte bh 0 >> put_ bh a >> put_ bh b >> put_ bh c >> put_ bh d
-                   >> put_ bh e >> put_ bh f
+                   >> put_ bh e
     XFamEqn a ->
       putByte bh 1 >> put_ bh a
 
@@ -1365,7 +1351,7 @@ instance (Binary a, Binary b) => Binary (FamEqn GhcSe a b) where
     tag <- getByte bh
     case tag of
       0 -> FamEqn <$> get bh <*> get bh <*> get bh <*> get bh
-                  <*> get bh <*> get bh
+                  <*> get bh
       1 -> XFamEqn <$> get bh
       _ -> getPanic "FamEqn"
 
@@ -1637,6 +1623,32 @@ instance Binary (HsOverLit GhcSe) where
       0 -> OverLit <$> get bh <*> get bh <*> get bh
       1 -> XOverLit <$> get bh
       _ -> getPanic "HsOverLit"
+
+instance Binary Promoted where
+  get bh = getByte bh >>= \tag -> case tag of
+    0 -> pure Promoted
+    1 -> pure NotPromoted
+    _ -> getPanic "Promoted"
+
+  put_ bh p = putByte bh $ case p of
+    Promoted -> 0
+    NotPromoted -> 1
+
+instance Binary RealSrcLoc where
+  put_ bh l = do
+    put_ bh (srcLocFile l)
+    put_ bh (srcLocLine l)
+    put_ bh (srcLocCol l)
+
+  get bh = mkRealSrcLoc <$> get bh <*> get bh <*> get bh
+
+instance Binary RealSrcSpan where
+  put_ bh s = put_ bh (realSrcSpanStart s) >> put_ bh (realSrcSpanEnd s)
+
+  get bh = do
+    loc1 <- get bh
+    loc2 <- get bh
+    return (mkRealSrcSpan loc1 loc2)
 
 instance Binary OverLitVal where
   put_ bh v

@@ -329,7 +329,7 @@ type instance XNPlusKPat GhcSe = NoExt
 type instance XSigPat GhcPs = (LHsSigWcType GhcPs)
 type instance XSigPat GhcRn = (LHsSigWcType GhcRn)
 type instance XSigPat GhcTc = Type
-type instance XSigPat GhcSe = NoExt
+type instance XSigPat GhcSe = (LHsSigWcType GhcSe)
 
 type instance XCoPat  (GhcPass _) = NoExt
 type instance XXPat   (GhcPass _) = NoExt

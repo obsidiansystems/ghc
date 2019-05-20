@@ -113,7 +113,7 @@ import DynFlags
 import Panic
 import Lexeme
 import BinIface ( getWithUserData, putWithUserData )
-import IfaceEnv ( NameCacheUpdater(..), updNameCacheIO )
+import IfaceEnv ( NameCacheUpdater(..) )
 import qualified Binary as Bin
 import qualified EnumSet
 import Plugins
@@ -717,7 +717,7 @@ defaultRunMeta (MetaAW r)
 
 readHsSpliceData :: HscEnv -> FilePath -> IO HsSpliceData
 readHsSpliceData hsc_env hsSpliceFile = do
-  let ncu = NCU (updNameCache $ hsc_NC hsc_env)
+  let ncu = NCU (updNameCache hsc_env)
   exists <- doesFileExist hsSpliceFile
   if exists
     then do bh <- Bin.readBinMem hsSpliceFile
